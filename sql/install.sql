@@ -1,0 +1,7 @@
+-- tfb_parking sql
+
+ALTER TABLE `owned_vehicles`
+    ADD COLUMN `stored` TINYINT(1) NOT NULL DEFAULT 1,
+    ADD COLUMN `parking` VARCHAR(64) NULL DEFAULT NULL,
+    ADD COLUMN `pound` VARCHAR(64) NULL DEFAULT NULL,
+    ADD COLUMN `mileage` DECIMAL(12,2) NOT NULL DEFAULT 0.00;
