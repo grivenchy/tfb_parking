@@ -81,6 +81,10 @@ Locales["en"] = {
     tooFarFromImpoundError = "You are too far from this impound.",
     invalidVehicleContextError = "Invalid vehicle context.",
     unknownRouteError = "Unknown request.",
+    vfixTargetInvalidError = "Target player ID is invalid.",
+    vfixTargetNotInVehicleError = "Target player must be driving a vehicle.",
+    vfixRepairedSuccess = "Vehicle repaired.",
+    vfixRequesterSuccess = "Repaired vehicle for ID %{id}.",
 
     statusReady = "Ready",
     statusDestroyed = "Destroyed",
