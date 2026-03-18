@@ -283,6 +283,19 @@ local function normalizePlate(plate)
     return normalized
 end
 
+local function isStoredFlag(value)
+    if value == true or value == 1 then
+        return true
+    end
+
+    if type(value) == "string" then
+        local lowered = value:gsub("^%s+", ""):gsub("%s+$", ""):lower()
+        return lowered == "1" or lowered == "true"
+    end
+
+    return false
+end
+
 local function trim(value)
     if type(value) ~= "string" then
         return nil
@@ -1483,7 +1496,7 @@ local function openVehicleMenu(route, locationName, locationLabel)
         local imageName = getVehicleImageName(vehicle.model)
         local impoundName = trim(vehicle.pound)
         local isImpounded = impoundName ~= nil
-        local isStored = vehicle.stored == true
+        local isStored = isStoredFlag(vehicle.stored)
         local leftOut = route == "garage" and (not isStored) and (not isImpounded)
         local parkingGarage = isImpounded and impoundName or trim(vehicle.parking) or locationName
         local sameGarage = parkingGarage == locationName
@@ -1823,7 +1836,7 @@ local function openVParkVehicleMenu()
         local trackedMileage = getTrackedMileage(plate, readMileageValue(vehicle.mileage))
         local parkingName = tostring(vehicle.parking or ""):gsub("^%s+", ""):gsub("%s+$", "")
         local parkingKey = parkingName:upper()
-        local isStored = vehicle.stored == true
+        local isStored = isStoredFlag(vehicle.stored)
         local canTakeOut = isStored and vehicle.pound == nil
 
         menuVehicles[#menuVehicles + 1] = {
