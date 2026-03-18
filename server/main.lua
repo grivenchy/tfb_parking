@@ -35,6 +35,19 @@ local function trim(value)
     return out
 end
 
+local function isStoredFlag(value)
+    if value == true or value == 1 then
+        return true
+    end
+
+    if type(value) == "string" then
+        local lowered = toLower(trim(value) or "")
+        return lowered == "1" or lowered == "true"
+    end
+
+    return false
+end
+
 local function truncate(value, maxLength)
     if type(value) ~= "string" then
         return nil
@@ -1215,7 +1228,7 @@ local function buildVehicleSummary(row)
     return {
         plate = row.plate,
         owner = row.owner,
-        stored = row.stored == 1 or row.stored == true,
+        stored = isStoredFlag(row.stored),
         parking = row.parking,
         pound = row.pound,
         impoundReason = impoundReason,
@@ -2028,7 +2041,7 @@ local function takeOutVParkVehicle(source, plate)
         })
     end
 
-    if not (ownedVehicle.stored == 1 or ownedVehicle.stored == true) then
+    if not isStoredFlag(ownedVehicle.stored) then
         return false, Lang("vparkVehicleOut")
     end
 
@@ -2132,7 +2145,7 @@ local function takeOutVehicle(source, route, locationName, plate)
         return false, Lang("vehicleNotOwnedError")
     end
 
-    if not (ownedVehicle.stored == 1 or ownedVehicle.stored == true) then
+    if not isStoredFlag(ownedVehicle.stored) then
         if route == "garage" then
             return false, Lang("vehicleLeftOutError")
         end
@@ -2326,7 +2339,7 @@ local function returnImpoundedVehicleToGarage(source, impoundName, plate)
     if not ownedVehicle then
         return false, Lang("vehicleNotInImpoundError")
     end
-    if not (ownedVehicle.stored == 1 or ownedVehicle.stored == true) then
+    if not isStoredFlag(ownedVehicle.stored) then
         return false, Lang("actionFailedError")
     end
     if not ownedVehicle.pound or ownedVehicle.pound ~= impoundName then
@@ -2563,7 +2576,7 @@ local function transferVehicle(source, currentGarageName, targetGarageName, plat
         return false, Lang("vehicleNotOwnedError")
     end
 
-    if not (ownedVehicle.stored == 1 or ownedVehicle.stored == true) or ownedVehicle.pound ~= nil then
+    if not isStoredFlag(ownedVehicle.stored) or ownedVehicle.pound ~= nil then
         return false, Lang("transferVehicleNotStoredError")
     end
 
@@ -2623,7 +2636,7 @@ local function transferOwnership(source, currentGarageName, plate, targetServerI
         return false, Lang("vehicleNotOwnedError")
     end
 
-    if not (ownedVehicle.stored == 1 or ownedVehicle.stored == true) or ownedVehicle.pound ~= nil then
+    if not isStoredFlag(ownedVehicle.stored) or ownedVehicle.pound ~= nil then
         return false, Lang("transferVehicleNotStoredError")
     end
 
